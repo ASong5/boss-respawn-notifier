@@ -20,7 +20,7 @@ public interface BossRespawnNotifierConfig extends Config
 	)
 	default int globalLeadTime()
 	{
-		return 10;
+		return 5;
 	}
 
 
