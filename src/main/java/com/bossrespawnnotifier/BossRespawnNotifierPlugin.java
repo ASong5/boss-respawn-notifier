@@ -171,24 +171,41 @@ public class BossRespawnNotifierPlugin extends Plugin
 
 	private Notification getNotification(Boss boss)
 	{
-		Notification n = configManager.getConfiguration(
+		Boolean override = configManager.getConfiguration(
 			"bossrespawnnotifier",
-			boss.name().toLowerCase() + "Notification",
-			Notification.class
+			boss.name().toLowerCase() + "Override",
+			Boolean.class
 		);
-		return n != null ? n : Notification.OFF;
+		if (Boolean.TRUE.equals(override))
+		{
+			Notification n = configManager.getConfiguration(
+				"bossrespawnnotifier",
+				boss.name().toLowerCase() + "Notification",
+				Notification.class
+			);
+			return n != null ? n : Notification.ON;
+		}
+		return config.defaultNotification();
 	}
 
 	private long getLeadTime(Boss boss)
 	{
-		Integer override = configManager.getConfiguration(
+		Boolean override = configManager.getConfiguration(
 			"bossrespawnnotifier",
-			boss.name().toLowerCase() + "LeadTime",
-			Integer.class
+			boss.name().toLowerCase() + "Override",
+			Boolean.class
 		);
-		if (override != null && override >= 0)
+		if (Boolean.TRUE.equals(override))
 		{
-			return override;
+			Integer leadTime = configManager.getConfiguration(
+				"bossrespawnnotifier",
+				boss.name().toLowerCase() + "LeadTime",
+				Integer.class
+			);
+			if (leadTime != null && leadTime >= 0)
+			{
+				return leadTime;
+			}
 		}
 		return config.globalLeadTime();
 	}
